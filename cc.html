@@ -1,15 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Encryption and Decryption</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encryption and Decryption</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    textarea, input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-  <input type="text" id="inputValue">
+  <textarea id="inputValue" placeholder="Enter text..."></textarea>
+  <textarea id="outputValue"></textarea>
   <button onclick="encryptData()">Encrypt</button>
   <button onclick="decryptData()">Decrypt</button>
-  <p id="outputValue"></p>
 
   <script>
     function encryptData() {
@@ -41,7 +62,7 @@
       })
       .then(response => response.text())
       .then(data => {
-        document.getElementById("outputValue").textContent = data;
+        document.getElementById("outputValue").value = data;
       })
       .catch(error => {
         console.error('Error:', error);
