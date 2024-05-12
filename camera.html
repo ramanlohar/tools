@@ -3,37 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Camera View</title>
+    <title>QR Code Scanner</title>
     <style>
-        body {
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #000;
+        #preview {
+            width: 100%;
+            height: auto;
+            margin: auto;
         }
-        video {
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
+    <h1>QR Code Scanner</h1>
     <video id="preview" autoplay></video>
+    <div id="result"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@zxing/library@3.0.0"></script>
     <script>
         const video = document.getElementById('preview');
+        const resultDiv = document.getElementById('result');
 
         // Access the device camera
-        navigator.mediaDevices.getUserMedia({ video: true })
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
             .then(function(stream) {
                 video.srcObject = stream;
             })
             .catch(function(err) {
                 console.error('Error accessing the camera: ', err);
             });
+
+        // Initialize ZXing library for QR code scanning
+        const codeReader = new ZXing.BrowserQRCodeReader();
+
+        // Start scanning for QR codes
+        codeReader.decodeFromVideoDevice(null, 'preview', (result, err) => {
+            if (result) {
+                console.log('QR code detected:', result.text);
+                resultDiv.textContent = 'QR code content: ' + result.text;
+            }
+            if (err && !(err instanceof ZXing.NotFoundException)) {
+                console.error('Error decoding QR code:', err);
+            }
+        });
     </script>
 </body>
 </html>
+ 
